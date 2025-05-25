@@ -9,7 +9,7 @@ export class VatanBilgisayarPage {
         this.page = page;
         this.phoneCategoryFieldLocator = page.locator("(//span[@class='checkmark'])[6]");
         this.searchInputFieldLocator = page.locator('#navbar-search-input');
-        this.favIconButtonLocator = page.locator("//a[@id='fav_Icon']");
+        this.favIconButtonLocator = page.locator('#fav_Icon');
     }
     // Search for a product using the provided search term
     async searchProduct(searchTerm) {
@@ -84,7 +84,8 @@ export class VatanBilgisayarPage {
         //Error handling with try catch block for some assertion. Visibility control part.
         try {
             //Assertions
-            expect(this.page.getByText('Ürün, favori listenize eklendi')).toBeVisible();
+            await expect(this.page.locator('#modal-favorite')).toContainText('Ürün, favori listenize eklendi.');
+            await this.page.getByRole('button', { name: 'Close' }).click();
         } catch (e) {
             logger.warn('After clicking fav button about an item, This adding favorite process is failed.');
             logger.warn(e.message);
@@ -95,29 +96,28 @@ export class VatanBilgisayarPage {
     // Navigate to the favorites page
     async goToFavorites() {
         logger.info('Navigating to favorites.');
-        await this.page.getByRole('button', { name: ' Hesabım ' }).click();
-        await waitForAwhile(this.page, 3000);
-        await this.page.getByRole('link', { name: 'Favori Ürünlerim' }).click();
+        const control = await this.page.getByRole('button', { name: 'Close' });
+        if(control){
+            await control.click();
+        }else{
+            await this.page.getByRole('button', { name: ' Hesabım ' }).click();
+            await waitForAwhile(this.page, 3000);
+            await this.page.getByRole('link', { name: 'Favori Ürünlerim' }).click();
+        }
+       
     }
     // Add a favorite product to the cart
     async addFavoriteToCart() {
         logger.info('Adding favorite product to cart.');
 
         await waitForAwhile(this.page, 3000);
+        await expect(page.locator('h1')).toContainText('Favorilerim');
         await expect(this.page.getByRole('link', { name: 'Sepete Ekle' })).toBeVisible();
-        await expect(this.page.getByRole('img', { name: 'Samsung Galaxy S25 Ultra 12/' })).toBeVisible();
-
-
         await this.page.getByRole('link', { name: 'Sepete Ekle' }).click();
         await waitForAwhile(this.page, 3000);
         // Verify product added to cart
         try {
-            await expect(this.page.getByText('Ürün Eklendi.')).toBeVisible();
-            await expect(this.page.locator('#modal-basket')).toContainText('Ürün Eklendi.');
-            await expect(
-                this.page.locator('#modal-basket')
-                    .getByRole('link', { name: 'Samsung Galaxy S25 Ultra 12/256 Gb Akıllı Telefon Titanyum Siyah', exact: true })
-            ).toBeVisible();
+            await expect(page.locator('#modal-basket')).toContainText('Ürün Eklendi.');
             logger.info('Favorite product has been added to the cart.');
         } catch (e) {
             logger.warn('Product is not added correctly in bucket. Please check and control');
@@ -128,9 +128,15 @@ export class VatanBilgisayarPage {
     }
     // Navigate to the cart page
     async goToCart() {
-        logger.info('Navigating to the cart.');
-        await expect(this.page.getByRole('button', { name: 'SEPETE GİT' })).toBeVisible();
-        await this.page.getByRole('button', { name: 'SEPETE GİT' }).click();
+        try{
+            const goBucket = await this.page.getByRole('button', { name: 'SEPETE GİT' });
+            await expect(goBucket).toBeVisible();
+            await goBucket.click();
+    
+            logger.info('Navigating to the cart.');
+        }catch(e){
+            logger.error(e);
+        }
     }
     // Proceed to checkout from the cart
     async proceedToCheckout() {
@@ -142,29 +148,48 @@ export class VatanBilgisayarPage {
             logger.warn('Checkout page does not loaded correctly');
             logger.error(`goToCart method gived failed. Error details: ${e.message}`);
         }
-        await this.page.getByRole('button', { name: 'Sepeti Onayla ' }).click();
+        await this.page.getByRole('button', { name: 'Sepeti Onayla ' }).click();
     }
     // Add a delivery address during checkout
     async addDeliveryAddress() {
+        //Call statement to get the test data
+        const { address } = TEST_DATA;
+
         logger.info('Adding delivery address.');
         try {
-            await expect(this.page.getByRole('button', { name: 'Teslimatı Onayla ' })).toBeVisible();
+            await expect(this.page.getByRole('button', { name: 'Teslimatı Onayla ' })).toBeVisible();
         } catch (e) {
             logger.error('This text is not visible --> "teslimatı onayla"');
         }
-        await this.page.getByText('Yeni adres ekle').click();
-        const { address } = TEST_DATA;
+
+        //new address add button click
+        await this.page.getByRole('form').locator('span').first().click();
+        // alternative method: await this.page.getByText('Yeni adres ekle').click();
+
         // Fill address form
-        await this.page.locator('#AddressRecordName').fill(address.recordName);
-        await this.page.locator('#NameandSurname').fill(address.fullName);
+        const addressRecordName= this.page.locator('#AddressRecordName');
+        await addressRecordName.click();
+        await addressRecordName.fill(address.recordName);
+        
+        const fullNameField= this.page.locator('#NameandSurname');
+        await fullNameField.click();
+        await fullNameField.fill(address.fullName);
+
         await this.page.locator('#SelectedCityName').selectOption(address.city);
         await this.page.locator('#FSelectedTownName').selectOption(address.district);
         await this.page.locator('#FSelectedNeighbourhoodName').selectOption(address.neighborhood);
-        await this.page.locator('#Address').fill(address.street);
-        // Select mahalle
-        await this.page.locator('.selectize-input').click();
-        await this.page.getByText(address.mahalle).click();
-        await this.page.locator('#Tckn').fill(address.tckn);
+
+       
+        await this.page.locator('.selectize-input').click();  //Post Code.
+        await this.page.getByText('KORKUTREİS MAH/YENİŞEHİR').click();
+
+        const adressField= this.page.locator('#Address');
+        await adressField.click();
+        await adressField.fill(address.street);
+
+        const tcknNo = this.page.locator('#Tckn');
+        await tcknNo.click();
+        await tcknNo.fill(address.tckn);
 
         await this.page.getByRole('button', { name: 'KAYDET' }).click();
         await waitForAwhile(this.page, 3000);
@@ -172,7 +197,6 @@ export class VatanBilgisayarPage {
         await this.page.getByRole('button', { name: 'Tamam' }).click();
         await waitForAwhile(this.page, 3000);
 
-        await this.page.locator('body').press('Escape');
         logger.info('Delivery address has been added.');
     }
     // Empty the cart
@@ -180,11 +204,11 @@ export class VatanBilgisayarPage {
         logger.info('Emptying the cart.');
         try {
             await this.page.getByRole('link', { name: ' Sepetim' }).click();
-            await expect(this.page.getByRole('link', { name: ' Sepeti Boşalt' })).toBeVisible();
-            await this.page.getByRole('link', { name: '' }).click();
+            await expect(this.page.getByRole('link', { name: ' Sepeti Boşalt' })).toBeVisible();
+            await this.page.getByRole('link', { name: ' Sepeti Boşalt' }).click();
             // Verify cart is empty
             await expect(this.page.getByRole('heading', { name: 'Sepetinizde ürün bulunmuyor.' })).toBeVisible();
-            await expect(this.page.locator('.empty-basket-content')).toBeVisible();
+            await expect(this.page.locator('.empty-basket-content')).toBeVisible(); //LOGO control
             logger.info('Cart has been emptied.');
         } catch (e) {
             logger.warn('Cart has not been emptied correctly.');

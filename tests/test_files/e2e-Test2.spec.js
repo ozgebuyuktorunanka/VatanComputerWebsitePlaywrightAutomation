@@ -11,7 +11,17 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - All Steps in One Test', (
         logger.info('🚀 Starting complete E2E journey in single test execution');
 
         // Initialize browser context and page
-        const context = await browser.newContext();
+        context = await browser.newContext({
+            permissions: ['geolocation'],
+            geolocation: { latitude: 41.0082, longitude: 28.9784 },
+            locale: 'tr-TR',
+            viewport: { width: 1920, height: 1080 },
+            userAgent: 'Only Login Scenario',
+            extraHTTPHeaders: {
+              'Accept-Language': 'tr-TR,tr;q=0.9,en;q=0.8'
+            }
+        });
+        
         const page = await context.newPage();
         const vatanPage = new VatanBilgisayarPage(page);
         const loginTest = new LoginTest();

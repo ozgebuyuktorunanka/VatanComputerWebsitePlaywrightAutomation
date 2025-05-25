@@ -19,11 +19,15 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
 
         // Create persistent context to maintain session
         context = await browser.newContext({
+            permissions: ['geolocation'],
+            geolocation: { latitude: 41.0082, longitude: 28.9784 },
+            locale: 'tr-TR',
             viewport: { width: 1920, height: 1080 },
-            userAgent: 'E2E-Test-Agent',
+            userAgent: 'Only Login Scenario',
             extraHTTPHeaders: {
-                'Accept-Language': 'tr-TR,tr;q=0.9,en;q=0.8'
-            }});
+              'Accept-Language': 'tr-TR,tr;q=0.9,en;q=0.8'
+            }
+        });
 
         page = await context.newPage();
         vatanPage = new VatanBilgisayarPage(page);

@@ -6,13 +6,15 @@ import logger from '../../src/logger/logger_winston';
 const test = base.extend({
   authenticatedContext: async ({ browser }, use) => {
     const context = await browser.newContext({
+      permissions: ['geolocation'],
+      geolocation: { latitude: 41.0082, longitude: 28.9784 },
+      locale: 'tr-TR',
       viewport: { width: 1920, height: 1080 },
       userAgent: 'Only Login Scenario',
       extraHTTPHeaders: {
         'Accept-Language': 'tr-TR,tr;q=0.9,en;q=0.8'
       }
     });
-
     await use(context);
     await context.close();
   },
