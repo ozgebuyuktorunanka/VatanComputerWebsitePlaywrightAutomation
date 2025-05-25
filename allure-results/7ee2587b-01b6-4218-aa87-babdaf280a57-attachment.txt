@@ -1,7 +1,0 @@
-[ℹ️-INFO]—[05/25/2025, 23:06:36]-📝[⭐ Step 3: Adding product to favorites]
-[ℹ️-INFO]—[05/25/2025, 23:06:36]-📝[Selecting Samsung Galaxy S25 Ultra product]
-[ℹ️-INFO]—[05/25/2025, 23:06:36]-📝[Selecting product: (2) SM-S938BZKDTUR Samsung]
-[ℹ️-INFO]—[05/25/2025, 23:06:36]-📝[Adding product to favorites list]
-[ℹ️-INFO]—[05/25/2025, 23:06:36]-📝[Adding product to favorites.]
-[ℹ️-INFO]—[05/25/2025, 23:06:39]-📝[Product has been added to favorites.]
-[ℹ️-INFO]—[05/25/2025, 23:06:39]-📝[✅ Product added to favorites successfully.]

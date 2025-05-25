@@ -1,7 +1,0 @@
-[ℹ️-INFO]—[05/25/2025, 23:06:53]-📝[🚀 Starting single browser session for complete E2E journey]
-[ℹ️-INFO]—[05/25/2025, 23:06:54]-📝[Navigated to: https://www.vatanbilgisayar.com]
-[ℹ️-INFO]—[05/25/2025, 23:06:55]-📝[Cookie consent accepted]
-[❌-ERROR]—[05/25/2025, 23:06:55]-📝[In controlHeaderLoginButton method gives a error: details-> page.waitForTimeout: Target page, context or browser has been closed]
-[❌-ERROR]—[05/25/2025, 23:06:55]-📝[Login test failed: expect.toBeVisible: Target page, context or browser has been closed]
-[ℹ️-INFO]—[05/25/2025, 23:06:55]-📝[🧹 Cleaning up: Closing browser context and page]
-[ℹ️-INFO]—[05/25/2025, 23:06:55]-📝[✅ Browser session closed successfully]

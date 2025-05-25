@@ -107,6 +107,7 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
 
         logger.info('Starting new shopping session');
         await vatanPage.startShopping();
+        
         logger.info('✅ Cart emptied and ready for new shopping session.');
 
         logger.info('🎉 Complete E2E journey finished successfully!');
@@ -118,6 +119,7 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
         logger.info('🧹 Cleaning up: Closing browser context and page');
         if (context) {
             await context.close();
+            await browser.close();
         }
         logger.info('✅ Browser session closed successfully');
     });

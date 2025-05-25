@@ -1,5 +1,0 @@
-[ℹ️-INFO]—[05/25/2025, 23:06:39]-📝[🛒 Step 4: Viewing favorites and adding to cart]
-[ℹ️-INFO]—[05/25/2025, 23:06:39]-📝[Navigating to favorites page]
-[ℹ️-INFO]—[05/25/2025, 23:06:39]-📝[Navigating to favorites.]
-[ℹ️-INFO]—[05/25/2025, 23:06:45]-📝[🧹 Cleaning up: Closing browser context and page]
-[ℹ️-INFO]—[05/25/2025, 23:06:45]-📝[✅ Browser session closed successfully]
