@@ -17,9 +17,11 @@ export class BasePage {
   
     async handleCookieConsent() {
       const acceptCookiesBtn = await this.page.getByRole('button', { name: 'Tümünü Kabul Et' });
-      if (await acceptCookiesBtn.isVisible()) {
+      if (acceptCookiesBtn) {
         await acceptCookiesBtn.click();
         this.logger.info('Cookie consent accepted');
+      }else{
+        logger.info('continue without popup');
       }
     }
   }

@@ -42,13 +42,10 @@ export default defineConfig({
     testDir: "./tests", // 📌 RootDir for Test Spec JS
     testMatch: ["**/*.spec.js"],
     headless:headless,
-    //globalSetup, // 🔥 These are the steps to run before all test cases start.
-    //globalTeardown, // 🔥 These are the steps that will run after all test cases are finished.
-
     // 🌐 Parallel Tests ve CI/CD settings
-    fullyParallel: true,
-    retries: process.env.CI ? 2 : 0,
-    workers: process.env.CI ? 4 : undefined,
+    fullyParallel: false,
+    retries: process.env.CI ? 1 : 0,
+    workers: process.env.CI ? 2 : undefined,
     maxFailures: process.env.CI ? 75 : undefined,
     reporter: [
         ["list"],

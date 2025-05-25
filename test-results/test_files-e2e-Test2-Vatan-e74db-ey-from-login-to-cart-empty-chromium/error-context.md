@@ -1,17 +1,21 @@
 # Test info
 
-- Name: Vatan Bilgisayar Complete E2E Journey - Single Session >> Step 4: View Favorites and Add to Cart
-- Location: /Users/ozgebuyuktorun/Documents/repos/optiimPlaywright/tests/TestFiles/e2e_test1.spec.js:66:5
+- Name: Vatan Bilgisayar Complete E2E Journey - All Steps in One Test >> Complete shopping journey from login to cart empty
+- Location: /Users/ozgebuyuktorun/Documents/repos/optiimPlaywright/tests/test_files/e2e-Test2.spec.js:9:5
 
 # Error details
 
 ```
-Error: locator.click: Target page, context or browser has been closed
-Call log:
-  - waiting for getByRole('button', { name: ' Hesabım ' })
+Error: expect.toBeVisible: Error: strict mode violation: locator('//span[@class=\'icon-check-circle-alt\']') resolved to 2 elements:
+    1) <span class="icon-check-circle-alt"></span> aka locator('#subbforstock span').first()
+    2) <span class="icon-check-circle-alt"></span> aka locator('#modal-favorite span')
 
-    at VatanBilgisayarPage.goToFavorites (/Users/ozgebuyuktorun/Documents/repos/optiimPlaywright/src/helpers/helperFunctions.js:77:68)
-    at /Users/ozgebuyuktorun/Documents/repos/optiimPlaywright/tests/TestFiles/e2e_test1.spec.js:70:25
+Call log:
+  - expect.toBeVisible with timeout 5000ms
+  - waiting for locator('//span[@class=\'icon-check-circle-alt\']')
+
+    at VatanBilgisayarPage.addToFavorites (/Users/ozgebuyuktorun/Documents/repos/optiimPlaywright/src/helpers/helperFunctions.js:82:81)
+    at /Users/ozgebuyuktorun/Documents/repos/optiimPlaywright/tests/test_files/e2e-Test2.spec.js:34:13
 ```
 
 # Page snapshot
@@ -67,7 +71,7 @@ Call log:
       - img "Vatan Bilgisayar"
     - textbox "Aramak istediğiniz ürünü yazın"
     - button ""
-    - button " Giriş Yap "
+    - button " Hesabım "
     - button "Cart":  Sepetim 0 
     - list:
       - listitem:
@@ -180,10 +184,10 @@ Call log:
     - img "Samsung Galaxy S25 Ultra 12/256 Gb Akıllı Telefon Titanyum Siyah"
   - button "Go to slide 9":
     - img "Samsung Galaxy S25 Ultra 12/256 Gb Akıllı Telefon Titanyum Siyah"
-  - text:  video 5.0 (2) | Soru & Cevap (5) SM-S938BZKDTUR / 149754
+  - text:  video Web'e Özel Bu Fiyata Son 19 Ürün 5.0 (2) | Soru & Cevap (5) SM-S938BZKDTUR / 149754
   - heading "Samsung Galaxy S25 Ultra 12/256 Gb Akıllı Telefon Titanyum Siyah" [level=1]
   - heading [level=3]
-  - text: 79.999 TL 76.998 TL 76.998 TL'den başlayan taksitlerle & Kargo Bedava Dahili Hafıza
+  - text: 72.322 TL Kargo Bedava Dahili Hafıza
   - link "1 TB":
     - /url: samsung-galaxy-s25-ultra-12-1-tb-akilli-telefon-titanyum-siyah.html
   - link "256 GB":
@@ -222,27 +226,28 @@ Call log:
   - radio
   - img
   - text: +1 Yıl Ek Garanti
-  - paragraph: 15.999 TL
+  - paragraph: 14.999 TL
   - button "Birlikte Al"
   - text: "Birlikte Alabileceğiniz Ürünler:"
-  - img "Samsung Galaxy S25 Ultra Standlı Kordonlu Kılıf - Siyah"
-  - paragraph:
-    - link "Samsung Galaxy S25 Ultra Standlı Kordonlu Kılıf - Siyah":
-      - /url: samsung-galaxy-s25-ultra-standli-kordonlu-kilif-siyah.html
-  - paragraph: 2998,99 TL
-  - text: Birlikte Al
   - img
   - paragraph:
     - link "Samsung Galaxy Watch7 40mm Haki":
       - /url: samsung-galaxy-watch7-40mm-haki.html
-  - paragraph: 3099 TL
+  - paragraph: Hediye
   - paragraph: 7999 TL
-  - text: Birlikte Al
+  - text: SEÇİLDİ
   - img
   - paragraph:
     - link "Samsung Galaxy Watch7 44mm Gümüş":
       - /url: samsung-galaxy-watch7-44mm-gumus.html
-  - paragraph: 3999 TL
+  - paragraph: Hediye
+  - paragraph: 8999 TL
+  - text: Birlikte Al
+  - img
+  - paragraph:
+    - link "Samsung Galaxy Watch7 44mm Haki":
+      - /url: samsung-galaxy-watch7-44mm-haki.html
+  - paragraph: Hediye
   - paragraph: 8999 TL
   - text: Birlikte Al
   - link "Daha Fazla Göster ":
@@ -876,8 +881,14 @@ Call log:
     - /url: https://etbis.eticaret.gov.tr/sitedogrulama/A22B98CC770243BDB6E959F81FD6C7B8
     - img "ETBIS"
   - paragraph: Copyright © 2025 Vatan Bilgisayar San. ve Tic. A.Ş
-- text:  Giriş Yapınız
-- button "Tamam"
+- paragraph: Kampanyalardan haberdar olmak için şimdi eposta onayı verin, fırsatları kaçırmayın!
+- text: Onaylıyorum 
+- dialog:
+  - text:  Ürün, favori listenize eklendi.
+  - link "Favori Listem":
+    - /url: /uyeBilgi/favorilistem/
+  - button "Close":
+    - img
 ```
 
 # Test source
@@ -886,148 +897,184 @@ Call log:
    1 | import { TEST_DATA } from '../../src/data/testData.js';
    2 | import logger from '../../src/logger/logger_winston.js';
    3 | import { expect } from '@playwright/test';
-   4 |
-   5 | // Helper Functions
-   6 | export class VatanBilgisayarPage {
-   7 |     constructor(page) {
-   8 |         this.page = page;
-   9 |     }
-   10 |     // Search for a product using the provided search term
-   11 |     async searchProduct(searchTerm) {
-   12 |         logger.info(`Searching for product: ${searchTerm}`);
-   13 |         await expect(this.page.getByRole('textbox', { name: 'Aramak istediğiniz ürünü yazın' })).toBeVisible();
-   14 |
-   15 |         const searchField =await this.page.locator("//input[@id='navbar-search-input']");
-   16 |         await searchField.click();
-   17 |         await searchField.fill(searchTerm);
-   18 |         await searchField.press('Enter');
-   19 |     }
-   20 |     // Filter the search results by the phone category
-   21 |     async filterByPhoneCategory() {
-   22 |         logger.info('Filtering results by phone category.');
-   23 |         await expect(this.page.getByRole('tab', { name: 'Kategoriler ' })).toBeVisible();
-   24 |         await expect(this.page.locator("(//span[@class='checkmark'])[6]")).toBeVisible();
-   25 |         await this.page.locator("(//span[@class='checkmark'])[6]").click();
-   26 |     }
-   27 |     // Verify the search results for the expected products
-   28 |     async verifySearchResults() {
-   29 |         logger.info('Verifying search results.');
-   30 |         await expect(this.page.locator("(//span[@class='checkmark'])[6]")).toBeVisible();
-   31 |         const expectedProducts = [
-   32 |             '(10) SM-A065FZKGTUR Samsung',
-   33 |             '(10) SM-A165FZKJTUR Samsung',
-   34 |             '(20) SM-S721BZKGTUR Samsung'
-   35 |         ];
-   36 |         for (const product of expectedProducts) {
-   37 |             //Assertions
-   38 |             await expect(this.page.getByRole('link', { name: product })).toBeVisible();
-   39 |         }
-   40 |         logger.info('All expected products are visible in the search results.');
-   41 |     }
-   42 |     // Navigate to the second page of search results
-   43 |     async navigateToPage2() {
-   44 |         logger.info('Navigating to page 2 of search results.');
-   45 |     
-   46 |         // Locate the page 2 link
-   47 |         const pageTwoLink = this.page.locator("//a[normalize-space()='2']");
-   48 |         
-   49 |         // Scroll the link into view if needed
-   50 |         await pageTwoLink.scrollIntoViewIfNeeded();
-   51 |         
-   52 |         // Click the link to navigate to page 2
-   53 |         await pageTwoLink.click();
-   54 |         
-   55 |         logger.info('Successfully navigated to page 2 of search results.');
-   56 |     }
-   57 |     // Select a product from the search results
-   58 |     async selectProduct(productSelector) {
-   59 |         logger.info(`Selecting product: ${productSelector}`);
-   60 |         await this.page.getByRole('link', { name: productSelector }).click();
-   61 |     }
-   62 |     // Add the selected product to favorites
-   63 |     async addToFavorites() {
-   64 |         logger.info('Adding product to favorites.');
-   65 |         await expect(this.page.locator("//a[@id='fav_Icon']")).toBeVisible();
-   66 |         await this.page.locator("//a[@id='fav_Icon']").click();
-   67 |
-   68 |         //Assertions
-   69 |         expect(this.page.locator("//span[@class='icon-check-circle-alt']")).toBeVisible();
-   70 |         expect(this.page.getByText('Ürün, favori listenize eklendi')).toBeVisible();
+   4 | import { waitForAwhile } from './waitHelper.js';
+   5 |
+   6 | // Helper Functions
+   7 | export class VatanBilgisayarPage {
+   8 |     constructor(page) {
+   9 |         this.page = page;
+   10 |         this.phoneCategoryFieldLocator = page.locator("(//span[@class='checkmark'])[6]");
+   11 |         this.searchInputFieldLocator = page.locator('#navbar-search-input');
+   12 |         this.favIconButtonLocator = page.locator("//a[@id='fav_Icon']");
+   13 |     }
+   14 |     // Search for a product using the provided search term
+   15 |     async searchProduct(searchTerm) {
+   16 |         logger.info(`Searching for product: ${searchTerm}`);
+   17 |
+   18 |         //Assertion: we will control this assertion for search field visibility
+   19 |         await expect(this.page.getByRole('textbox', { name: 'Aramak istediğiniz ürünü yazın' })).toBeVisible();
+   20 |
+   21 |         await this.searchInputFieldLocator.click();
+   22 |         await this.searchInputFieldLocator.fill(searchTerm);
+   23 |         await this.searchInputFieldLocator.press('Enter');
+   24 |         await waitForAwhile(this.page,3000); //3 second wait
+   25 |     }
+   26 |     // Filter the search results by the phone category
+   27 |     async filterByPhoneCategory() {
+   28 |         logger.info('Filtering results by phone category.');
+   29 |         await expect(this.page.getByRole('tab', { name: 'Kategoriler ' })).toBeVisible();
+   30 |         await expect(this.phoneCategoryFieldLocator).toBeVisible();
+   31 |         await this.phoneCategoryFieldLocator.click();
+   32 |     }
+   33 |     // Verify the search results for the expected products
+   34 |     async verifySearchResults() {
+   35 |         logger.info('Verifying search results.');
+   36 |         await expect(this.phoneCategoryFieldLocator).toBeVisible();
+   37 |         const expectedProducts = [
+   38 |             '(10) SM-A065FZKGTUR Samsung',
+   39 |             '(10) SM-A165FZKJTUR Samsung',
+   40 |             '(20) SM-S721BZKGTUR Samsung'
+   41 |         ];
+   42 |         for (const product of expectedProducts) {
+   43 |             //Assertions // Control the some Samsung Phone models.
+   44 |             await expect(this.page.getByRole('link', { name: product })).toBeVisible();
+   45 |         }
+   46 |         logger.info('All expected products are visible in the search results.');
+   47 |     }
+   48 |     // Navigate to the second page of search results
+   49 |     async navigateToPage2() {
+   50 |         logger.info('Navigating to page 2 of search results.');
+   51 |
+   52 |         // Locate the page 2 link
+   53 |         const pageTwoLink = this.page.locator("//a[normalize-space()='2']");
+   54 |
+   55 |         // Scroll the link into view if needed
+   56 |         await pageTwoLink.scrollIntoViewIfNeeded();
+   57 |
+   58 |         // Click the link to navigate to page 2
+   59 |         await pageTwoLink.click();
+   60 |
+   61 |         logger.info('Successfully navigated to page 2 of search results.');
+   62 |     }
+   63 |     // Select a product from the search results
+   64 |     async selectProduct(productSelector) {
+   65 |         logger.info(`Selecting product: ${productSelector}`);
+   66 |         await this.page.getByRole('link', { name: productSelector }).click();
+   67 |     }
+   68 |     // Add the selected product to favorites
+   69 |     async addToFavorites() {
+   70 |         logger.info('Adding product to favorites.');
    71 |
-   72 |         logger.info('Product has been added to favorites.');
-   73 |     }
-   74 |     // Navigate to the favorites page
-   75 |     async goToFavorites() {
-   76 |         logger.info('Navigating to favorites.');
->  77 |         await this.page.getByRole('button', { name: ' Hesabım ' }).click();
-      |                                                                    ^ Error: locator.click: Target page, context or browser has been closed
-   78 |         await this.page.getByRole('link', { name: 'Favori Ürünlerim' }).click();
-   79 |     }
-   80 |     // Add a favorite product to the cart
-   81 |     async addFavoriteToCart() {
-   82 |         logger.info('Adding favorite product to cart.');
-   83 |         await expect(this.page.getByRole('link', { name: 'Sepete Ekle' })).toBeVisible();
-   84 |         await expect(this.page.getByRole('img', { name: 'Samsung Galaxy S25 Ultra 12/' })).toBeVisible();
-   85 |         await this.page.getByRole('link', { name: 'Sepete Ekle' }).click();
-   86 |         // Verify product added to cart
-   87 |         await expect(this.page.getByText('Ürün Eklendi.')).toBeVisible();
-   88 |         await expect(this.page.locator('#modal-basket')).toContainText('Ürün Eklendi.');
-   89 |         await expect(
-   90 |             this.page.locator('#modal-basket')
-   91 |                 .getByRole('link', { name: 'Samsung Galaxy S25 Ultra 12/256 Gb Akıllı Telefon Titanyum Siyah', exact: true })
-   92 |         ).toBeVisible();
-   93 |         logger.info('Favorite product has been added to the cart.');
-   94 |     }
-   95 |     // Navigate to the cart page
-   96 |     async goToCart() {
-   97 |         logger.info('Navigating to the cart.');
-   98 |         await expect(this.page.getByRole('button', { name: 'SEPETE GİT' })).toBeVisible();
-   99 |         await this.page.getByRole('button', { name: 'SEPETE GİT' }).click();
-  100 |     }
-  101 |     // Proceed to checkout from the cart
-  102 |     async proceedToCheckout() {
-  103 |         logger.info('Proceeding to checkout.');
-  104 |         await expect(this.page.getByRole('button', { name: 'Sepeti Onayla ' })).toBeVisible();
-  105 |         await expect(this.page.getByRole('heading', { name: 'Sipariş Özeti' })).toBeVisible();
-  106 |         await this.page.getByRole('button', { name: 'Sepeti Onayla ' }).click();
-  107 |     }
-  108 |     // Add a delivery address during checkout
-  109 |     async addDeliveryAddress() {
-  110 |         logger.info('Adding delivery address.');
-  111 |         await expect(this.page.getByRole('button', { name: 'Teslimatı Onayla ' })).toBeVisible();
-  112 |         await this.page.getByText('Yeni adres ekle').click();
-  113 |         const { address } = TEST_DATA;
-  114 |         // Fill address form
-  115 |         await this.page.locator('#AddressRecordName').fill(address.recordName);
-  116 |         await this.page.locator('#NameandSurname').fill(address.fullName);
-  117 |         await this.page.locator('#SelectedCityName').selectOption(address.city);
-  118 |         await this.page.locator('#FSelectedTownName').selectOption(address.district);
-  119 |         await this.page.locator('#FSelectedNeighbourhoodName').selectOption(address.neighborhood);
-  120 |         await this.page.locator('#Address').fill(address.street);
-  121 |         // Select mahalle
-  122 |         await this.page.locator('.selectize-input').click();
-  123 |         await this.page.getByText(address.mahalle).click();
-  124 |         await this.page.locator('#Tckn').fill(address.tckn);
-  125 |         await this.page.getByRole('button', { name: 'KAYDET' }).click();
-  126 |         await this.page.getByRole('button', { name: 'Tamam' }).click();
-  127 |         await this.page.locator('body').press('Escape');
-  128 |         logger.info('Delivery address has been added.');
-  129 |     }
-  130 |     // Empty the cart
-  131 |     async emptyCart() {
-  132 |         logger.info('Emptying the cart.');
-  133 |         await this.page.getByRole('link', { name: ' Sepetim' }).click();
-  134 |         await expect(this.page.getByRole('link', { name: ' Sepeti Boşalt' })).toBeVisible();
-  135 |         await this.page.getByRole('link', { name: '' }).click();
-  136 |         // Verify cart is empty
-  137 |         await expect(this.page.getByRole('heading', { name: 'Sepetinizde ürün bulunmuyor.' })).toBeVisible();
-  138 |         await expect(this.page.locator('.empty-basket-content')).toBeVisible();
-  139 |         logger.info('Cart has been emptied.');
-  140 |     }
-  141 |     // Start shopping again
-  142 |     async startShopping() {
-  143 |         logger.info('Starting a new shopping session.');
-  144 |         await this.page.getByRole('link', { name: 'Alışverişe Başla' }).click();
-  145 |     }
-  146 | }
+   72 |         //Firstly control the fav button is visible or not.
+   73 |         await expect(this.favIconButtonLocator).toBeVisible();
+   74 |
+   75 |         //After the controlling button visibility, We can click the this button correctly.
+   76 |         await this.favIconButtonLocator.click();
+   77 |
+   78 |         await waitForAwhile(this.page,3000);  // For loading process we will add here an 3 second wait.
+   79 |         //Error handling with try catch block for some assertion. Visibility control part.
+   80 |         try {
+   81 |             //Assertions
+>  82 |             expect(this.page.locator("//span[@class='icon-check-circle-alt']")).toBeVisible();
+      |                                                                                 ^ Error: expect.toBeVisible: Error: strict mode violation: locator('//span[@class=\'icon-check-circle-alt\']') resolved to 2 elements:
+   83 |             expect(this.page.getByText('Ürün, favori listenize eklendi')).toBeVisible();
+   84 |         } catch (e) {
+   85 |             logger.warn('After clicking fav button about an item, This adding favorite process is failed.');
+   86 |             logger.warn(e.message);
+   87 |         }
+   88 |
+   89 |         logger.info('Product has been added to favorites.');
+   90 |     }
+   91 |     // Navigate to the favorites page
+   92 |     async goToFavorites() {
+   93 |         logger.info('Navigating to favorites.');
+   94 |         await this.page.getByRole('button', { name: ' Hesabım ' }).click();
+   95 |         await waitForAwhile(this.page,3000); 
+   96 |         await this.page.getByRole('link', { name: 'Favori Ürünlerim' }).click();
+   97 |     }
+   98 |     // Add a favorite product to the cart
+   99 |     async addFavoriteToCart() {
+  100 |         logger.info('Adding favorite product to cart.');
+  101 |
+  102 |         await waitForAwhile(this.page,3000); 
+  103 |         await expect(this.page.getByRole('link', { name: 'Sepete Ekle' })).toBeVisible();
+  104 |         await expect(this.page.getByRole('img', { name: 'Samsung Galaxy S25 Ultra 12/' })).toBeVisible();
+  105 |
+  106 |
+  107 |         await this.page.getByRole('link', { name: 'Sepete Ekle' }).click();
+  108 |         await waitForAwhile(this.page,3000); 
+  109 |         // Verify product added to cart
+  110 |         try {
+  111 |             await expect(this.page.getByText('Ürün Eklendi.')).toBeVisible();
+  112 |             await expect(this.page.locator('#modal-basket')).toContainText('Ürün Eklendi.');
+  113 |             await expect(
+  114 |                 this.page.locator('#modal-basket')
+  115 |                     .getByRole('link', { name: 'Samsung Galaxy S25 Ultra 12/256 Gb Akıllı Telefon Titanyum Siyah', exact: true })
+  116 |             ).toBeVisible();
+  117 |             logger.info('Favorite product has been added to the cart.');
+  118 |         } catch (e) {
+  119 |             logger.warn('Product is not added correctly in bucket. Please check and control');
+  120 |             logger.error(e.message);
+  121 |             throw e;
+  122 |         }
+  123 |
+  124 |     }
+  125 |     // Navigate to the cart page
+  126 |     async goToCart() {
+  127 |         logger.info('Navigating to the cart.');
+  128 |         await expect(this.page.getByRole('button', { name: 'SEPETE GİT' })).toBeVisible();
+  129 |         await this.page.getByRole('button', { name: 'SEPETE GİT' }).click();
+  130 |     }
+  131 |     // Proceed to checkout from the cart
+  132 |     async proceedToCheckout() {
+  133 |         logger.info('Proceeding to checkout.');
+  134 |         try {
+  135 |             await expect(this.page.getByRole('button', { name: 'Sepeti Onayla ' })).toBeVisible();
+  136 |             await expect(this.page.getByRole('heading', { name: 'Sipariş Özeti' })).toBeVisible();
+  137 |         } catch (e) {
+  138 |             logger.warn('Checkout page does not loaded correctly');
+  139 |             logger.error(`goToCart method gived failed. Error details: ${e.message}`);
+  140 |         }
+  141 |         await this.page.getByRole('button', { name: 'Sepeti Onayla ' }).click();
+  142 |     }
+  143 |     // Add a delivery address during checkout
+  144 |     async addDeliveryAddress() {
+  145 |         logger.info('Adding delivery address.');
+  146 |         try {
+  147 |             await expect(this.page.getByRole('button', { name: 'Teslimatı Onayla ' })).toBeVisible();
+  148 |         } catch (e) {
+  149 |             logger.error('This text is not visible --> "teslimatı onayla"');
+  150 |         }
+  151 |         await this.page.getByText('Yeni adres ekle').click();
+  152 |         const { address } = TEST_DATA;
+  153 |         // Fill address form
+  154 |         await this.page.locator('#AddressRecordName').fill(address.recordName);
+  155 |         await this.page.locator('#NameandSurname').fill(address.fullName);
+  156 |         await this.page.locator('#SelectedCityName').selectOption(address.city);
+  157 |         await this.page.locator('#FSelectedTownName').selectOption(address.district);
+  158 |         await this.page.locator('#FSelectedNeighbourhoodName').selectOption(address.neighborhood);
+  159 |         await this.page.locator('#Address').fill(address.street);
+  160 |         // Select mahalle
+  161 |         await this.page.locator('.selectize-input').click();
+  162 |         await this.page.getByText(address.mahalle).click();
+  163 |         await this.page.locator('#Tckn').fill(address.tckn);
+  164 |
+  165 |         await this.page.getByRole('button', { name: 'KAYDET' }).click();
+  166 |         await waitForAwhile(this.page,3000); 
+  167 |
+  168 |         await this.page.getByRole('button', { name: 'Tamam' }).click();
+  169 |         await waitForAwhile(this.page,3000); 
+  170 |
+  171 |         await this.page.locator('body').press('Escape');
+  172 |         logger.info('Delivery address has been added.');
+  173 |     }
+  174 |     // Empty the cart
+  175 |     async emptyCart() {
+  176 |         logger.info('Emptying the cart.');
+  177 |         try {
+  178 |             await this.page.getByRole('link', { name: ' Sepetim' }).click();
+  179 |             await expect(this.page.getByRole('link', { name: ' Sepeti Boşalt' })).toBeVisible();
+  180 |             await this.page.getByRole('link', { name: '' }).click();
+  181 |             // Verify cart is empty
+  182 |             await expect(this.page.getByRole('heading', { name: 'Sepetinizde ürün bulunmuyor.' })).toBeVisible();
 ```

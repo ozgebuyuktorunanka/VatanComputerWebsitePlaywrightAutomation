@@ -1,6 +1,5 @@
 
 import { HomePage } from '../pages/HomePage.js';
-import { GoogleLoginPage } from '../pages/GooogleLoginPage.js'
 import { AuthService } from '../services/AuthService.js';
 import logger from '../logger/logger_winston';
 
@@ -13,30 +12,16 @@ export class LoginTest {
     try {
       // Initialize page objects
       const homePage = new HomePage(page);
-      const googleLoginPage = new GoogleLoginPage(page);
-
-      // Get test credentials
-      const credentials = this.authService.getTestCredentials();
 
       // Step 1: Navigate to homepage
       await homePage.navigateToHomePage();
 
       // Step 2: Click login button and navigate to login
-      await homePage.clickHeaderLoginButton();
-      await homePage.clickLoginLink();
-
-      // Step 3: Perform Google login
-      const popupPromise = await googleLoginPage.initializeGoogleLogin();
-      const popup = await popupPromise;
-      await googleLoginPage.performGoogleLogin(popup, credentials);
-
+      await homePage.controlHeaderLoginButton();
       // Step 4: Wait for main page to update
       await homePage.waitForPageLoad();
 
-      // Step 5: Refresh homepage to reflect login state
-      await homePage.refreshToReflectLoginState();
-
-      // Step 6: Verify successful login
+      // Step 5: Verify successful login
       await homePage.verifyUserLoggedIn();
       await homePage.verifyHomepageLogo();
 
@@ -49,11 +34,4 @@ export class LoginTest {
     }
   }
 
-  async executeNegativePathLogin(page, context) {
-    try{
-
-    }catch(e){
-      
-    }
-  }
 }

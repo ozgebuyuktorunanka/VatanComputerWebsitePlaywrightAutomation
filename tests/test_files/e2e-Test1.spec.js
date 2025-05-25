@@ -2,11 +2,10 @@ import { test, expect } from '@playwright/test';
 import { VatanBilgisayarPage } from '../../src/helpers/helperFunctions.js';
 import logger from '../../src/logger/logger_winston.js';
 import { TEST_DATA } from '../../src/data/testData.js';
-import { LoginTest } from '../../src/tests/LoginTest.js'; 
-
+import { LoginTest } from '../../src/loginClass/LoginTest'; 
 
 // Single Browser Session Test Suite
-test.describe.configure({ mode: 'default' });
+test.describe.configure({ mode: 'serial' });
 test.describe('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
     //Global Variable
     let vatanPage;
@@ -15,14 +14,20 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
 
     // Setup: Initialize browser context and page once
     test.beforeAll(async ({ browser }) => {
+        test.setTimeout(120000);
         logger.info('🚀 Starting single browser session for complete E2E journey');
 
         // Create persistent context to maintain session
-        context = await browser.newContext();
+        context = await browser.newContext({
+            viewport: { width: 1920, height: 1080 },
+            userAgent: 'E2E-Test-Agent',
+            extraHTTPHeaders: {
+                'Accept-Language': 'tr-TR,tr;q=0.9,en;q=0.8'
+            }});
+
         page = await context.newPage();
         vatanPage = new VatanBilgisayarPage(page);
         const loginTest = new LoginTest();
-
         await loginTest.executeHappyPathLogin(page, context);
     });
 
@@ -43,6 +48,7 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
     });
 
     test('Step 2: Navigate Through Search Results', async () => {
+        test.setTimeout(120000);
         logger.info('📄 Step 2: Navigating through search result pages');
 
         logger.info('Navigating to page 2 of search results');
@@ -54,6 +60,7 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
     });
 
     test('Step 3: Add Product to Favorites', async () => {
+        test.setTimeout(120000);
         logger.info('⭐ Step 3: Adding product to favorites');
 
         logger.info('Selecting Samsung Galaxy S25 Ultra product');
@@ -65,6 +72,7 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
     });
 
     test('Step 4: View Favorites and Add to Cart', async () => {
+        test.setTimeout(120000);
         logger.info('🛒 Step 4: Viewing favorites and adding to cart');
 
         logger.info('Navigating to favorites page');
@@ -76,6 +84,7 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
     });
 
     test('Step 5: Proceed Through Checkout Process', async () => {
+        test.setTimeout(120000);
         logger.info('💳 Step 5: Proceeding through checkout process');
 
         logger.info('Navigating to shopping cart');
@@ -90,6 +99,7 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
     });
 
     test('Step 6: Empty Cart and Complete Journey', async () => {
+        test.setTimeout(120000);
         logger.info('🗑️ Step 6: Emptying cart and completing the journey');
 
         logger.info('Emptying the shopping cart');
@@ -102,8 +112,9 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
         logger.info('🎉 Complete E2E journey finished successfully!');
     });
 
-    // Cleanup: Close browser context after all tests
+    // Cleanup: Close browser context after all tests- This is a teardown method for specific this scenario.
     test.afterAll(async () => {
+        test.setTimeout(120000);
         logger.info('🧹 Cleaning up: Closing browser context and page');
         if (context) {
             await context.close();

@@ -2,9 +2,10 @@ import { test, expect } from '@playwright/test';
 import { VatanBilgisayarPage } from '../../src/helpers/helperFunctions.js';
 import logger from '../../src/logger/logger_winston.js';
 import { TEST_DATA } from '../../src/data/testData.js';
-import { LoginTest } from '../../src/tests/LoginTest.js'; 
+import { LoginTest } from '../../src/loginClass/LoginTest'; 
 
 // Alternative Test Scenario: Single test with all steps combined
+test.describe.configure({ mode: 'serial' });
 test.describe('Vatan Bilgisayar Complete E2E Journey - All Steps in One Test', () => {
     test('Complete shopping journey from login to cart empty', async ({ browser }) => {
         logger.info('🚀 Starting complete E2E journey in single test execution');

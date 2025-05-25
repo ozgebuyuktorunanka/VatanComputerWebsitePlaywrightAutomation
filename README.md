@@ -82,28 +82,15 @@ npm install
 npx playwright install
 ```
 
-### 2. **Environment Setup**
-```bash
-# Copy environment template
-cp .env.example .env
-
-# Configure your test credentials
-vim .env
-```
-
-### 3. **Run Tests**
+### 2. **Run Tests**
 ```bash
 # Run all tests
-npm run test
+npx playwright test
 
-# Run in headed mode (visible browser)
-npm run test:headed
-
-# Run single session tests
-npm run test:single-session
-
-# Run with specific browser
-npm run test:chrome
+#Run a specific test file
+npx playwright test e2e-Test1.spec.js
+npx playwright test e2e-Test2.spec.js
+npx playwright test login.spec.js
 ```
 
 ## 🔧 Configuration
@@ -190,83 +177,6 @@ export const TEST_DATA = {
 - ✅ Checkout flow completion
 - ✅ Order confirmation
 
-## 📊 Test Execution Modes
-
-### 🔄 **Parallel Execution**
-```bash
-# Run tests in parallel (default)
-npm run test:parallel
-
-# Specify number of workers
-npm run test -- --workers=4
-```
-
-### 🎯 **Serial Execution** 
-```bash
-# Run tests sequentially
-npm run test:serial
-
-# Single browser session (recommended for E2E)
-npm run test:single-session
-```
-
-### 🐛 **Debug Mode**
-```bash
-# Debug with visible browser
-npm run test:debug
-
-# Step-by-step debugging
-npm run test -- --debug
-```
-
-### 📱 **Cross-browser Testing**
-```bash
-# All browsers
-npm run test:all-browsers
-
-# Specific browser
-npm run test:chrome
-npm run test:firefox
-npm run test:safari
-```
-
-## 🔍 Page Object Model
-
-### 🏗️ **Class Structure**
-```javascript
-// src/helpers/helperFunctions.js
-export class VatanBilgisayarPage {
-  constructor(page) {
-    this.page = page;
-    this.selectors = {
-      searchBox: '[data-testid="search-input"]',
-      loginButton: '[data-testid="login-btn"]',
-      // ... other selectors
-    };
-  }
-
-  async searchProduct(searchTerm) {
-    await this.page.fill(this.selectors.searchBox, searchTerm);
-    await this.page.press(this.selectors.searchBox, 'Enter');
-  }
-
-  // ... other methods
-}
-```
-
-### 🎯 **Usage Example**
-```javascript
-test('Product search workflow', async ({ page }) => {
-  const vatanPage = new VatanBilgisayarPage(page);
-  
-  await vatanPage.goto();
-  await vatanPage.acceptCookies();
-  await vatanPage.loginWithGoogle();
-  await vatanPage.searchProduct('samsung');
-  
-  await expect(page).toHaveURL(/search/);
-});
-```
 
 ## 📝 Logging & Reporting
 
@@ -290,18 +200,6 @@ const logger = winston.createLogger({
 });
 ```
 
-### 📊 **Report Generation**
-```bash
-# Generate HTML report
-npm run report:html
-
-# Generate Allure report
-npm run report:allure
-
-# Open reports in browser
-npm run report:open
-```
-
 ### 📈 **Log Levels**
 - 🔴 **ERROR**: Test failures and critical issues
 - 🟡 **WARN**: Non-critical warnings and fallbacks
@@ -310,28 +208,6 @@ npm run report:open
 
 ## 🎯 Best Practices
 
-### ✅ **Test Design**
-- **Single Responsibility**: Each test focuses on one specific functionality
-- **Independent Tests**: No dependencies between test cases
-- **Data-Driven**: Parameterized tests with external data sources
-- **Page Objects**: Encapsulate page interactions in reusable classes
-
-### 🔧 **Code Quality**
-- **ESLint Integration**: Consistent code formatting and standards
-- **TypeScript Support**: Type safety for better maintainability
-- **Error Handling**: Comprehensive try-catch blocks and graceful failures
-- **Async/Await**: Proper handling of asynchronous operations
-
-### 🚀 **Performance**
-- **Smart Waits**: Use Playwright's auto-waiting capabilities
-- **Resource Optimization**: Minimal browser resource usage
-- **Parallel Execution**: Optimize test execution time
-- **Selective Testing**: Run only relevant tests based on changes
-
-### 🔐 **Security**
-- **Credential Management**: Environment variables for sensitive data
-- **No Hardcoded Values**: Dynamic configuration for all parameters
-- **Secure Logging**: Avoid logging sensitive information
 
 ## 🛠️ Troubleshooting
 
