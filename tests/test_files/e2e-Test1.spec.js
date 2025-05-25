@@ -119,7 +119,6 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
         logger.info('🧹 Cleaning up: Closing browser context and page');
         if (context) {
             await context.close();
-            await browser.close();
         }
         logger.info('✅ Browser session closed successfully');
     });

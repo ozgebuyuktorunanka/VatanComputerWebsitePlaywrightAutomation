@@ -61,7 +61,6 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - All Steps in One Test', (
         } finally {
             // Always cleanup
             await context.close();
-            await browser.close();
             logger.info('🧹 Browser session closed');
         }
     });
