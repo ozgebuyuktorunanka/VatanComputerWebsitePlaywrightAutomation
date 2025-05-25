@@ -1,3 +1,4 @@
-node_modules
+/node_modules
 /allure_results
 /logs
+/test-results
