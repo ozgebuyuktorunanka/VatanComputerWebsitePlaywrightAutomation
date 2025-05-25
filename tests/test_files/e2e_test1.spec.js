@@ -6,7 +6,8 @@ import { LoginTest } from '../../src/tests/LoginTest.js';
 
 
 // Single Browser Session Test Suite
-test.describe.serial('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
+test.describe.configure({ mode: 'default' });
+test.describe('Vatan Bilgisayar Complete E2E Journey - Single Session', () => {
     //Global Variable
     let vatanPage;
     let context;
