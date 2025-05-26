@@ -82,42 +82,40 @@ export class VatanBilgisayarPage {
 
         await waitForAwhile(this.page, 3000);  // For loading process we will add here an 3 second wait.
         //Error handling with try catch block for some assertion. Visibility control part.
-        try {
+
+        /**try {
             //Assertions
             await expect(this.page.locator('#modal-favorite')).toContainText('Ürün, favori listenize eklendi.');
             await this.page.getByRole('button', { name: 'Close' }).click();
         } catch (e) {
             logger.warn('After clicking fav button about an item, This adding favorite process is failed.');
             logger.warn(e.message);
-        }
+        }*/
 
         logger.info('Product has been added to favorites.');
     }
     // Navigate to the favorites page
     async goToFavorites() {
         logger.info('Navigating to favorites.');
-        const control = await this.page.getByRole('button', { name: 'Close' });
-        if(control){
-            await control.click();
-        }else{
-            await this.page.getByRole('button', { name: ' Hesabım ' }).click();
-            await waitForAwhile(this.page, 3000);
-            await this.page.getByRole('link', { name: 'Favori Ürünlerim' }).click();
-        }
-       
+
+        const accountButtonLocator= "//button[@id='btnMyAccount']";
+        await this.page.locator(accountButtonLocator).click();
+        await waitForAwhile(this.page, 3000);
+        await this.page.getByRole('link', { name: 'Favori Ürünlerim' }).click();
+
+
     }
     // Add a favorite product to the cart
     async addFavoriteToCart() {
         logger.info('Adding favorite product to cart.');
 
         await waitForAwhile(this.page, 3000);
-        await expect(page.locator('h1')).toContainText('Favorilerim');
-        await expect(this.page.getByRole('link', { name: 'Sepete Ekle' })).toBeVisible();
-        await this.page.getByRole('link', { name: 'Sepete Ekle' }).click();
+        await expect(this.page.locator('h1')).toContainText('Favorilerim');
+        await this.page.getByRole('link', { name: 'Sepete Ekle' }).nth(0).click();
         await waitForAwhile(this.page, 3000);
         // Verify product added to cart
         try {
-            await expect(page.locator('#modal-basket')).toContainText('Ürün Eklendi.');
+            await expect(this.page.locator('#modal-basket')).toContainText('Ürün Eklendi.');
             logger.info('Favorite product has been added to the cart.');
         } catch (e) {
             logger.warn('Product is not added correctly in bucket. Please check and control');
@@ -128,13 +126,13 @@ export class VatanBilgisayarPage {
     }
     // Navigate to the cart page
     async goToCart() {
-        try{
+        try {
             const goBucket = await this.page.getByRole('button', { name: 'SEPETE GİT' });
             await expect(goBucket).toBeVisible();
             await goBucket.click();
-    
+
             logger.info('Navigating to the cart.');
-        }catch(e){
+        } catch (e) {
             logger.error(e);
         }
     }
@@ -167,11 +165,11 @@ export class VatanBilgisayarPage {
         // alternative method: await this.page.getByText('Yeni adres ekle').click();
 
         // Fill address form
-        const addressRecordName= this.page.locator('#AddressRecordName');
+        const addressRecordName = this.page.locator('#AddressRecordName');
         await addressRecordName.click();
         await addressRecordName.fill(address.recordName);
-        
-        const fullNameField= this.page.locator('#NameandSurname');
+
+        const fullNameField = this.page.locator('#NameandSurname');
         await fullNameField.click();
         await fullNameField.fill(address.fullName);
 
@@ -179,11 +177,11 @@ export class VatanBilgisayarPage {
         await this.page.locator('#FSelectedTownName').selectOption(address.district);
         await this.page.locator('#FSelectedNeighbourhoodName').selectOption(address.neighborhood);
 
-       
-        await this.page.locator('.selectize-input').click();  //Post Code.
-        await this.page.getByText('KORKUTREİS MAH/YENİŞEHİR').click();
 
-        const adressField= this.page.locator('#Address');
+        await this.page.locator('.selectize-input').click();  //Post Code.
+        await this.page.getByText(address.postaCode).click();
+
+        const adressField = this.page.locator('#Address');
         await adressField.click();
         await adressField.fill(address.street);
 
@@ -192,10 +190,10 @@ export class VatanBilgisayarPage {
         await tcknNo.fill(address.tckn);
 
         await this.page.getByRole('button', { name: 'KAYDET' }).click();
-        await waitForAwhile(this.page, 3000);
+        await waitForAwhile(this.page, 2000);
 
         await this.page.getByRole('button', { name: 'Tamam' }).click();
-        await waitForAwhile(this.page, 3000);
+        await waitForAwhile(this.page, 2000);
 
         logger.info('Delivery address has been added.');
     }

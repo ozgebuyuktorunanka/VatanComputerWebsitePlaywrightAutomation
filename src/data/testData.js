@@ -8,8 +8,9 @@ export const TEST_DATA = {
       city: 'ANKARA',
       district: 'ÇAMLIDERE',
       neighborhood: 'BÜKELER',
-      street: '336.Sokak Ankara',
+      street: '337.Sokak Ankara',
       mahalle: 'BARDAKÇILAR MAH/ÇAMLIDERE',
-      tckn: '22222222222'
+      tckn: '22222222222',
+      postaCode: '06750 AHMETADİL MAH / AKYURT',
     }
   };

@@ -4,6 +4,7 @@ import logger from '../../src/logger/logger_winston.js';
 import { TEST_DATA } from '../../src/data/testData.js';
 import { LoginTest } from '../../src/loginClass/LoginTest';
 
+
 // Alternative Test Scenario: Single test with all steps combined
 test.describe.configure({ mode: 'serial' });
 test.describe('Vatan Bilgisayar Complete E2E Journey - All Steps in One Test', () => {
@@ -11,7 +12,7 @@ test.describe('Vatan Bilgisayar Complete E2E Journey - All Steps in One Test', (
         logger.info('🚀 Starting complete E2E journey in single test execution');
 
         // Initialize browser context and page
-        context = await browser.newContext({
+        const context = await browser.newContext({
             permissions: ['geolocation'],
             geolocation: { latitude: 41.0082, longitude: 28.9784 },
             locale: 'tr-TR',
